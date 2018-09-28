@@ -1,0 +1,13 @@
+[Unit]
+Description=Electronero Daemon
+After=network.target
+
+[Service]
+Type=forking
+GuessMainPID=no
+ExecStart=/usr/local/src/electronero/build/release/bin/electronerod --rpc-bind-ip 127.0.0.1 --detach --restricted-rpc
+Restart=always
+User=electronerodaemon
+
+[Install]
+WantedBy=multi-user.target

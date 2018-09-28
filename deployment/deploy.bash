@@ -16,34 +16,28 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 echo -e "[client]\nuser=root\npassword=$ROOT_SQL_PASS" | sudo tee /root/.my.cnf
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git python-virtualenv python3-virtualenv curl ntp build-essential screen cmake pkg-config libboost-all-dev libevent-dev libunbound-dev libminiupnpc-dev libunwind8-dev liblzma-dev libldns-dev libexpat1-dev mysql-server lmdb-utils libzmq3-dev
 cd ~
-git clone https://github.com/MoneroOcean/nodejs-pool.git  # Change this depending on how the deployment goes.
-cd /usr/src/gtest
-sudo cmake .
-sudo make
-sudo mv libg* /usr/lib/
+git clone https://github.com/bobbieltd/nodejs-pool.git  # Change this depending on how the deployment goes.
+# cd /usr/src/gtest
+# sudo cmake .
+# sudo make
+# sudo mv libg* /usr/lib/
 cd ~
 sudo systemctl enable ntp
 cd /usr/local/src
-sudo git clone --recursive https://github.com/monero-project/monero.git
-cd monero
-sudo git checkout v0.12.2.0
-curl https://raw.githubusercontent.com/MoneroOcean/nodejs-pool/master/deployment/monero_daemon.patch | sudo git apply -v
+sudo git clone --recursive https://github.com/electronero/electronero.git
+cd electronero
 sudo git submodule init
 sudo git submodule update
 sudo make -j$(nproc)
-sudo cp ~/nodejs-pool/deployment/monero.service /lib/systemd/system/
-sudo useradd -m monerodaemon -d /home/monerodaemon
-BLOCKCHAIN_DOWNLOAD_DIR=$(sudo -u monerodaemon mktemp -d)
-sudo -u monerodaemon wget --limit-rate=50m -O $BLOCKCHAIN_DOWNLOAD_DIR/blockchain.raw https://downloads.getmonero.org/blockchain.raw
-sudo -u monerodaemon /usr/local/src/monero/build/release/bin/monero-blockchain-import --input-file $BLOCKCHAIN_DOWNLOAD_DIR/blockchain.raw --batch-size 20000 --database lmdb#fastest --data-dir /home/monerodaemon/.bitmonero
-sudo -u monerodaemon rm -rf $BLOCKCHAIN_DOWNLOAD_DIR
+sudo cp ~/nodejs-pool/deployment/electronero.service /lib/systemd/system/
+sudo useradd -m electronerodaemon -d /home/electronerodaemon
 sudo systemctl daemon-reload
 sudo systemctl enable monero
 sudo systemctl start monero
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 source ~/.nvm/nvm.sh
-nvm install v8.11.3
-nvm alias default v8.11.3
+nvm install v8.12.0
+nvm alias default v8.12.0
 cd ~/nodejs-pool
 npm install
 npm install -g pm2
@@ -51,7 +45,7 @@ openssl req -subj "/C=IT/ST=Pool/L=Daemon/O=Mining Pool/CN=mining.pool" -newkey 
 mkdir ~/pool_db/
 sed -r "s/(\"db_storage_path\": ).*/\1\"\/home\/$CURUSER\/pool_db\/\",/" config_example.json > config.json
 cd ~
-git clone https://github.com/mesh0000/poolui.git
+git clone https://github.com/M5M400/poolui.git
 cd poolui
 npm install
 ./node_modules/bower/bin/bower update
@@ -83,7 +77,7 @@ sudo systemctl enable caddy.service
 sudo systemctl start caddy.service
 rm -rf $CADDY_DOWNLOAD_DIR
 cd ~
-sudo env PATH=$PATH:`pwd`/.nvm/versions/node/v8.11.3/bin `pwd`/.nvm/versions/node/v8.11.3/lib/node_modules/pm2/bin/pm2 startup systemd -u $CURUSER --hp `pwd`
+sudo env PATH=$PATH:`pwd`/.nvm/versions/node/v8.12.0/bin `pwd`/.nvm/versions/node/v8.12.0/lib/node_modules/pm2/bin/pm2 startup systemd -u $CURUSER --hp `pwd`
 cd ~/nodejs-pool
 sudo chown -R $CURUSER. ~/.pm2
 echo "Installing pm2-logrotate in the background!"

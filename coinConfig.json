@@ -8,5 +8,15 @@
     "name": "Monero",
     "mixIn": 4,
     "shortCode": "XMR"
+  },
+  "etnx": {
+    "funcFile": "./lib/coins/etnx.js",
+    "paymentFile": "./payment_systems/etnx.js",
+    "sigDigits": 100,
+    "shapeshift": "xmr_btc",
+    "xmrTo": false,
+    "name": "Electronero",
+    "mixIn": 8,
+    "shortCode": "ETNX"
   }
 }
