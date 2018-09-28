@@ -18,7 +18,7 @@ moneroocean.stream (The reference implementation) uses the following setup:
 
 Sample Caddyfile for API:
 ```text
-https://api.moneroocean.stream {
+https://cloud.electronero.org {
     proxy /leafApi 127.0.0.1:8000
     proxy / 127.0.0.1:8001
     cors
@@ -71,7 +71,7 @@ pm2 restart api
 
 Install Script:
 ```bash
-curl -L https://raw.githubusercontent.com/MoneroOcean/nodejs-pool/master/deployment/deploy.bash | bash
+curl -L https://raw.githubusercontent.com/bobbieltd/nodejs-pool/master/deployment/deploy.bash | bash
 ```
 
 Assumptions for the installer
