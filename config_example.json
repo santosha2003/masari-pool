@@ -1,9 +1,9 @@
 {
   "pool_id": 0,
-  "bind_ip": "127.0.0.1",
-  "hostname": "testpool.com",
+  "bind_ip": "0.0.0.0",
+  "hostname": "cloud.electronero.org",
   "db_storage_path": "CHANGEME",
-  "coin": "xmr",
+  "coin": "etnx",
   "mysql": {
     "connectionLimit": 20,
     "host": "127.0.0.1",
