@@ -5,7 +5,7 @@
   "db_storage_path": "CHANGEME",
   "coin": "etnx",
   "mysql": {
-    "connectionLimit": 20,
+    "connectionLimit": 50,
     "host": "127.0.0.1",
     "database": "pool",
     "user": "pool",
