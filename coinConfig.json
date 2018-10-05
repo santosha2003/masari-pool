@@ -16,7 +16,16 @@
     "shapeshift": "xmr_btc",
     "xmrTo": false,
     "name": "Electronero",
-    "mixIn": 8,
+    "mixIn": 2,
     "shortCode": "ETNX"
-  }
+  },
+  "etnxp": {
+    "funcFile": "./lib/coins/etnxp.js",
+    "paymentFile": "./payment_systems/etnxp.js",
+    "sigDigits": 100,
+    "shapeshift": "xmr_btc",
+    "xmrTo": false,
+    "name": "Electronero Pulse",
+    "mixIn": 2,
+    "shortCode": "ETNXP"
 }
