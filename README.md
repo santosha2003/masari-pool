@@ -16,6 +16,54 @@ moneroocean.stream (The reference implementation) uses the following setup:
 * https://moneroocean.stream is hosted on its own server, as the main website is a static frontend
 * https://api.moneroocean.stream hosts api, remoteShare, longRunner, payments, blockManager, worker, as these must all be hosted with access to the same LMDB database.
 
+
+FreeBSD - install Caddy from ports or use NGINX ; LMDB from ports.  Works!
+
+(poolui runs and listen at 127.0.0.1:8080)
+
+modules runs from bash script
+``
+pm2 start init.js --name=payments --log-date-format="YYYY-MM-DD HH:mm:ss:SSS Z" --no-autorestart -- --module=payments
+``
+MySQL 5.6 - correct users table - see error message & remove second unique key // install MySQL 5.7 - no error
+MySQL user pool need access (GRANT ALL ..) to pool table , password set in the config json
+MySQL need restart after FLUSH PRIVILEGES; 
+
+``
+root@pc1:~/electronero-pool # pm2 list
+⇆  PM2+ activated | Web: https://app.pm2.io/#/r/m8a8natrixr9q0y | Server: pc1-bd08e60b | Conn: Axon
+PM2+ on-premise link: root.keymetrics.io
+┌──────────────┬────┬─────────┬──────┬───────┬────────┬─────────┬────────┬─────┬────────────┬──────┬──────────┐
+│ App name     │ id │ version │ mode │ pid   │ status │ restart │ uptime │ cpu │ mem        │ user │ watching │
+├──────────────┼────┼─────────┼──────┼───────┼────────┼─────────┼────────┼─────┼────────────┼──────┼──────────┤
+│ api          │ 6  │ 0.0.1   │ fork │ 66187 │ online │ 0       │ 4m     │ 0%  │ 64.2 MB    │ root │ disabled │
+│ blockManager │ 5  │ 0.0.1   │ fork │ 64750 │ online │ 0       │ 6m     │ 0%  │ 381.7 MB   │ root │ disabled │
+│ longRunner   │ 7  │ 0.0.1   │ fork │ 70732 │ online │ 0       │ 17s    │ 0%  │ 96.2 MB    │ root │ disabled │
+│ payments     │ 8  │ 0.0.1   │ fork │ 70909 │ online │ 0       │ 6s     │ 0%  │ 65.3 MB    │ root │ disabled │
+│ pool         │ 3  │ 0.0.1   │ fork │ 63700 │ online │ 0       │ 7m     │ 0%  │ 86.2 MB    │ root │ disabled │
+│ remoteShare  │ 2  │ 0.0.1   │ fork │ 61556 │ online │ 0       │ 9m     │ 0%  │ 78.9 MB    │ root │ disabled │
+│ worker       │ 4  │ 0.0.1   │ fork │ 64206 │ online │ 0       │ 6m     │ 0%  │ 71.0 MB    │ root │ disabled │
+└──────────────┴────┴─────────┴──────┴───────┴────────┴─────────┴────────┴─────┴────────────┴──────┴──────────┘
+Modules
+┌──────────────────┬────┬─────────┬───────┬────────┬─────────┬─────┬───────────┬──────┐
+│ Module           │ id │ version │ pid   │ status │ restart │ cpu │ memory    │ user │
+├──────────────────┼────┼─────────┼───────┼────────┼─────────┼─────┼───────────┼──────┤
+│ pm2-logrotate    │ 1  │ 2.6.0   │ 60951 │ online │ 0       │ 0%  │ 49.1 MB   │ root │
+│ pm2-server-monit │ 0  │ 2.6.2   │ 60949 │ online │ 0       │ 0%  │ 58.0 MB   │ root │
+└──────────────────┴────┴─────────┴───────┴────────┴─────────┴─────┴───────────┴──────┘
+ Use `pm2 show <id|name>` to get more details about an app
+root@pc1:~/electronero-pool # 
+``
+restarts often?? MEM 19/32GB 52%   add some memory to server 24-32GB - processor support AES NI ??
+
+NGINX  - faster - serve port 127.0.0.1:8000 as Hostname.domain/leafApi   8001 port  /api (edit script)
+``
+https://gitlab.com/NodeJS-Pool-Dev-Channel/nginx-Pool-Configs/tree/master/
+
+``
+
+
+/*
 Sample Caddyfile for API:
 ```text
 https://cloud.electronero.org {
@@ -25,6 +73,7 @@ https://cloud.electronero.org {
     gzip
 }
 ```
+*/
 
 It is critically important that your webserver does not truncate the `/leafApi` portion of the URL for the remoteShare daemon, or it will not function!  Local pool servers DO use the remoteShare daemon, as this provides a buffer in case of an error with LMDB or another bug within the system, allowing shares and blocks to queue for submission as soon as the leafApi/remoteShare daemons are back up and responding with 200's.
 
