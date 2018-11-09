@@ -332,5 +332,12 @@ Credits
 [Snipa](https://github.com/Snipa22) - Original [nodejs-pool](https://github.com/Snipa22/nodejs-pool) from which, the original implementation has been borrowed.
 
 [Mesh00](https://github.com/mesh0000) - Frontend build in Angular JS [XMRPoolUI](https://github.com/mesh0000/poolui)
+https://github.com/santosha2003/poolui-electronero (bind external 0.0.0.0 + Electronero block explorer)
 
 [Wolf0](https://github.com/wolf9466/)/[OhGodAGirl](https://github.com/ohgodagirl) - Rebuild of node-multi-hashing with AES-NI [node-multi-hashing](https://github.com/Snipa22/node-multi-hashing-aesni)
+
+
+Payments working ! 
+http://santoshapro.me:8080/#/payments
+* ETNX ```etnkN5SfXdtQpg2LkhCGAGC1rrQQpPecFLYHSaH9nrEsaLN4HHjTsxy5XxPv4KQxg1WxFFPHeT3hscyeWC4HDvwSAZWZcTvPSi```
+* MSR ```5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ```
