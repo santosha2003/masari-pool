@@ -19,7 +19,7 @@ pm2 start init.js --name=remoteShare --log-date-format="YYYY-MM-DD HH:mm Z" -- -
 pm2 start init.js --name=longRunner --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=longRunner
 pm2 start init.js --name=pool --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=pool
 #pm2 restart api
-pm2 start init.js --name=api --log-date-format=YYYY-MM-DD HH:mm Z -- --module=api
+pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api
 
 #pm2 restart api
 

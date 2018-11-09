@@ -1,8 +1,8 @@
 {
   "pool_id": 0,
   "bind_ip": "0.0.0.0",
-  "hostname": "cloud.electronero.org",
-  "db_storage_path": "CHANGEME",
+  "hostname": "santoshapro.me",
+  "db_storage_path": "/root/db_pool/",
   "coin": "etnx",
   "mysql": {
     "connectionLimit": 50,
