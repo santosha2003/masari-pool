@@ -10,6 +10,7 @@
   "author": "Multiple",
   "license": "MIT",
   "dependencies": {
+    "apicache": "1.2.1",
     "async": "2.1.4",
     "bignum": "^0.12.5",
     "bluebird": "3.4.7",
@@ -18,16 +19,18 @@
     "circular-buffer": "1.0.2",
     "cluster": "0.7.7",
     "concat-stream": "^1.6.0",
-    "cors": "^2.8.1",
+    "cors": "^2.8.5",
     "crypto": "0.0.3",
+    "cryptoforknote-util": "git+https://github.com/santosha2003/node-cryptoforknote-util.git",
+    "cryptonight-hashing": "git+https://github.com/santosha2003/node-cryptonight-hashing.git",
     "debug": "2.6.9",
     "express": "4.14.0",
-    "apicache": "1.2.1",
     "jsonwebtoken": "^7.2.1",
     "minimist": "1.2.0",
     "moment": "2.21.0",
     "mysql": "2.15.0",
-    "node-lmdb": "0.4.12",
+    "node-lmdb": "^0.4.13",
+    "pm2-logrotate": "^2.6.0",
     "promise-mysql": "3.0.0",
     "protocol-buffers": "^3.2.1",
     "range": "0.0.3",
@@ -40,8 +43,6 @@
     "sticky-cluster": "^0.3.1",
     "uuid": "3.0.1",
     "wallet-address-validator": "0.1.0",
-    "zmq": "^2.15.3",
-    "cryptonight-hashing": "git://github.com/electronero-project/node-cryptonight-hashing.git",
-    "cryptonote-util": "git://github.com/electronero/node-cryptonote-util.git#xmr-Nan-2.0"
+    "zmq": "^2.15.3"
   }
 }

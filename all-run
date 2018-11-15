@@ -10,24 +10,26 @@ cd /root/electronero-pool
 #pm2 start init.js --name=payments --log-date-format=YYYY-MM-DD HH:mm Z -- --module=payments
 #pm2 start init.js --name=worker --log-date-format=YYYY-MM-DD HH:mm Z -- --module=worker
 #pm2 start init.js --name=longRunner --log-date-format=YYYY-MM-DD HH:mm Z -- --module=longRunner
-#killall node
+sleep 120
+killall node
+sleep 30
+killall node
 sleep 5
-#killall node
-sleep 5
-#killall node
+killall node
 sleep 3
-cd ~/electronero-pool/
+cd /root/electronero-pool/
 
 #pm2 start /root/electroneropulse/build/release/bin/pulsed -x -- --block-sync-size 100 --fast-block-sync 1 --seed-node 206.189.20.68:20389 --seed-node 104.236.175.63:20389 --seed-node 174.138.15.35:20389 --seed-node 46.101.40.29:20389 --seed-node 107.170.236.49:20389 --seed-node 138.68.192.102:20389 --seed-node 165.227.189.226:20389 --seed-node 45.55.120.174:20389
 gnome-terminal -- /root/electroneropulse/build/release/bin/pulsed --block-sync-size 100 --fast-block-sync 1 --seed-node 206.189.20.68:20389 --seed-node 104.236.175.63:20389 --seed-node 174.138.15.35:20389 --seed-node 46.101.40.29:20389 --seed-node 107.170.236.49:20389 --seed-node 138.68.192.102:20389 --seed-node 165.227.189.226:20389 --seed-node 45.55.120.174:20389
 
-#sleep 240
+sleep 120
 pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
 sleep 10
 pm2 list
 pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api
 sleep 15
 pm2 start init.js --name=blockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager
+pm2 start init.js --name=altblockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager
 pm2 start init.js --name=worker --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=worker
 pm2 start init.js --name=payments --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=payments
 pm2 start init.js --name=remoteShare --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=remoteShare
@@ -38,11 +40,21 @@ pm2 start init.js --name=pool --log-date-format="YYYY-MM-DD HH:mm Z" -- --module
 
 pm2 restart api
 sleep 5
-cd ~/poolui
 
-npm start
-cd ~/electronero-pool/
+cd /root/poolui
 
+gnome-terminal -- npm start
+
+cd /root/electronero-pool/
+
+LIMIT=500
+
+for ((a=1; a <= $LIMIT ; a++))
+ do
+ echo $ARG
 pm2 list
-sleep 3600
+sleep 360
 
+#sleep 5
+ done
+gnome-terminal

@@ -5,6 +5,7 @@ pm2 stop remoteShare
 pm2 stop pool
 pm2 stop payments
 pm2 stop longRunner
+pm2 stop altblockManager
 pm2 stop blockManager
 pm2 stop api
 
@@ -12,6 +13,7 @@ sleep 5
 
 pm2 start api
 pm2 start blockManager
+pm2 start altblockManager
 pm2 start longRunner
 pm2 start payments
 pm2 start pool

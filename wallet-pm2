@@ -1,0 +1,2 @@
+pm2 start /root/electronero/build/release/bin/electronero-wallet-rpc -- --rpc-bind-port=12092 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
+
