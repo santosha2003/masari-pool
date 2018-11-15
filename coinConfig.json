@@ -19,7 +19,16 @@
     "mixIn": 2,
     "shortCode": "ETNX"
   },
-  "etnxp": {
+  "msr": {
+    "funcFile": "./lib/coins/msr.js",
+    "paymentFile": "./payment_systems/msr.js",
+    "sigDigits": 100000000000,
+    "shapeshift": "xmr_btc",
+    "xmrTo": false,
+    "name": "Masari",
+    "mixIn": 2,
+    "shortCode": "MSR"
+  },  "etnxp": {
     "funcFile": "./lib/coins/etnxp.js",
     "paymentFile": "./payment_systems/etnxp.js",
     "sigDigits": 100,
