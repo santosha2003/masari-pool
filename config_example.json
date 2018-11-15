@@ -3,7 +3,7 @@
   "bind_ip": "0.0.0.0",
   "hostname": "santoshapro.me",
   "db_storage_path": "/root/db_pool/",
-  "coin": "etnx",
+  "coin": "etnxp",
   "mysql": {
     "connectionLimit": 50,
     "host": "127.0.0.1",
