@@ -37,8 +37,12 @@ sleep 30
 killall node
 sleep 3
 
+
 cd /root/electronero-pool
-./nvm1 use 8.11.3
+ ./nvm1 alias default 8.11.3
+ ./nvm1 current
+
+ ./nvm1 use 8.11.3
 # Xeon 4.3G + ssd disk + 32+ DDR4 = 30 seconds
 npm update
 
@@ -72,7 +76,7 @@ cd /root/electronero-pool/
 # see version node , bignum, cryptonote util core (bignum won't start after re boot?)
 gnome-terminal -- pm2 monit
 
- ./nvm alias default 8.11.3
+ ./nvm1 alias default 8.11.3
  ./nvm1 current
 
 LIMIT=500
