@@ -1,6 +1,7 @@
 pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api
 pm2 start init.js --name=remoteShare --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=remoteShare
 pm2 list
+./nvm1 current
 sleep 20
 
 #pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api

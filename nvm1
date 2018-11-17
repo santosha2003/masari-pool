@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export NVM_DIR=/root/.nvm
+export NODE_VERSION=9.11.1
 
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
 nvm $1 $2 $3 $4
