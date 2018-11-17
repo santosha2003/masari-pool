@@ -28,7 +28,6 @@ cd /root/electronero-pool/
 
 #pm2 start /root/electroneropulse/build/release/bin/pulsed -x -- --block-sync-size 100 --fast-block-sync 1 --seed-node 206.189.20.68:20389 --seed-node 104.236.175.63:20389 --seed-node 174.138.15.35:20389 --seed-node 46.101.40.29:20389 --seed-node 107.170.236.49:20389 --seed-node 138.68.192.102:20389 --seed-node 165.227.189.226:20389 --seed-node 45.55.120.174:20389
 sleep 60
-
 #sleep 300
 killall node
 sleep 30
@@ -39,6 +38,8 @@ sleep 3
 
 cd /root/electronero-pool
 ./nvm1 use 8.11.3
+# Xeon 4.3G + ssd disk + 32+ DDR4 = 30 seconds
+npm update
 
 pm2 list
 
@@ -66,6 +67,8 @@ cd /root/poolui
 gnome-terminal -- npm start
 
 cd /root/electronero-pool/
+
+# see version node , bignum, cryptonote util core (bignum won't start after re boot?)
 gnome-terminal -- pm2 monit
 
 LIMIT=500
