@@ -11,6 +11,10 @@ pm2 stop api
 
 sleep 5
 
+# ./nvm1 use 9.11.1
+# ree install bignum 8  version to 9 for FreeBSD 11.1 x64
+# npm update
+
 pm2 start api
 pm2 start blockManager
 pm2 start altblockManager

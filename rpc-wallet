@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+/root/electroneropulse/build/release/bin/pulse-wallet-rpc --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
