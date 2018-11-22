@@ -48,7 +48,7 @@ cd ~
 git clone https://github.com/M5M400/poolui.git
 cd poolui
 npm install
-./node_modules/bower/bin/bower update
+./node_modules/bower/bin/bower update --allow-root
 ./node_modules/gulp/bin/gulp.js build
 cd build
 sudo ln -s `pwd` /var/www
@@ -56,6 +56,8 @@ CADDY_DOWNLOAD_DIR=$(mktemp -d)
 cd $CADDY_DOWNLOAD_DIR
 curl -sL "https://snipanet.com/caddy.tar.gz" | tar -xz caddy init/linux-systemd/caddy.service
 sudo mv caddy /usr/local/bin
+#FreeBSD
+make -C /usr/ports/www/caddy install
 sudo chown root:root /usr/local/bin/caddy
 sudo chmod 755 /usr/local/bin/caddy
 sudo setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy

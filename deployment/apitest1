@@ -4,5 +4,9 @@
 #curl -H "Authorization: Bearer nv4" http://192.168.1.111:34445/1/config > api-test-conf
 #curl -H "Authorization: Bearer nv4" http://192.168.1.111:34444/1/config > conf-111-34444-monero
 curl -H "Authorization: Bearer !!!" http://192.168.1.179:34445/1/config > stat-179-34445-sumo-nv-2
-curl http://127.0.0.1:92/api/pool/stats
-curl http://127.0.0.1:92/leafApi/pool/stats
+curl https://santoshapro.me:88/api/pool/stats
+curl https://santoshapro.me:88/api/network/stats
+#http://127.0.0.1:88/leafApi/
+
+curl   https://santoshapro.me:92/leafApi
+curl   https://santoshapro.me:88/socket.io

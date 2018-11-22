@@ -1,0 +1,27 @@
+cd ~/masari-pool
+pm2 list
+pm2 stop worker
+pm2 stop remoteShare
+pm2 stop pool
+pm2 stop payments
+pm2 stop longRunner
+pm2 stop altblockManager
+pm2 stop blockManager
+pm2 stop api
+
+sleep 5
+
+# ./nvm1 use 9.11.1
+# ree install bignum 8  version to 9 for FreeBSD 11.1 x64
+# npm update
+
+pm2 start api
+pm2 start blockManager
+pm2 start altblockManager
+pm2 start longRunner
+pm2 start payments
+pm2 start pool
+# leaf pool
+pm2 start remoteShare
+pm2 start worker
+pm2 list

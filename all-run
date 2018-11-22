@@ -1,28 +1,33 @@
 #!/usr/bin/env bash
 
-killall node
+gnome-terminal -- /root/masari/build/release/bin/masarid --block-sync-size 100 --fast-block-sync=1
+
+#killall node
 sleep 60
-killall node
+#killall node
 sleep 30
 
-gnome-terminal -- /root/electroneropulse/build/release/bin/pulsed --block-sync-size 100 --fast-block-sync 1 --seed-node 206.189.20.68:20389 --seed-node 104.236.175.63:20389 --seed-node 174.138.15.35:20389 --seed-node 46.101.40.29:20389 --seed-node 107.170.236.49:20389 --seed-node 138.68.192.102:20389 --seed-node 165.227.189.226:20389 --seed-node 45.55.120.174:20389
 
-cd /root/electronero-pool
- ./nvm1 current
-#./nvm1 use 8.11.3
-#./nvm1 use 9.11.1
+#setup
+#cd /root/masari-pool
+# ./nvm1 current
+##./nvm1 use 8.11.3
+##./nvm1 use 9.11.1
 #./nvm1 install v8.12.0
+#./nvm1 use 8.12.0
 #./nvm1 alias default v8.12.0
+# ./nvm1 current
+#npm update
 
-npm update
-
-cd /root/poolui
+cd /root/poolui-masari
 
 gnome-terminal -- npm start
 
-cd /root/electronero-pool
+cd /root/masari-pool
 
-pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
+# 38080 p2p , rpc 38081, wallet rpc 38084   
+# Mysql base - add daemon2.port daemon2.address
+pm2 start /root/masari/build/release/bin/masari-wallet-rpc -- --rpc-bind-port 38084 --password-file ~/1/masari/wallet_pass --wallet-file ~/1/masari/pool --disable-rpc-login --trusted-daemon
 
 ./api-run
 # gnome-terminal -- /root/electronero/build/release/bin/electronero-wallet-rpc --rpc-bind-port 12092 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
@@ -33,14 +38,14 @@ pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bin
 #pm2 start init.js --name=payments --log-date-format=YYYY-MM-DD HH:mm Z -- --module=payments
 #pm2 start init.js --name=worker --log-date-format=YYYY-MM-DD HH:mm Z -- --module=worker
 #pm2 start init.js --name=longRunner --log-date-format=YYYY-MM-DD HH:mm Z -- --module=longRunner
-cd /root/electronero-pool/
+cd /root/masari-pool/
 
 #pm2 start /root/electroneropulse/build/release/bin/pulsed -x -- --block-sync-size 100 --fast-block-sync 1 --seed-node 206.189.20.68:20389 --seed-node 104.236.175.63:20389 --seed-node 174.138.15.35:20389 --seed-node 46.101.40.29:20389 --seed-node 107.170.236.49:20389 --seed-node 138.68.192.102:20389 --seed-node 165.227.189.226:20389 --seed-node 45.55.120.174:20389
 sleep 60
 
+# ln -s /root/.pm2/logs logs
 
-
-cd /root/electronero-pool
+cd /root/masari-pool/
 # ./nvm1 alias default 8.11.3
  ./nvm1 current
 
@@ -49,9 +54,9 @@ cd /root/electronero-pool
 npm install bignum
 npm update
 
-pm2 list
+#pm2 list
 
-pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
+#pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
 pm2 list
 sleep 60
 pm2 list
@@ -70,11 +75,13 @@ pm2 start init.js --name=pool --log-date-format="YYYY-MM-DD HH:mm Z" -- --module
 pm2 restart api
 sleep 5
 
-cd /root/poolui
+# 8081 port
+cd /root/poolui-masari
 
 gnome-terminal -- npm start
 
-cd /root/electronero-pool/
+cd /root/masari-pool/
+
 
 # see version node , bignum, cryptonote util core (bignum won't start after re boot?)
 gnome-terminal -- pm2 monit

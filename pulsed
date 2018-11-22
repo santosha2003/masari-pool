@@ -1,0 +1,91 @@
+#!/bin/sh
+# $FreeBSD: head/net-p2p/monero-cli/files/monerod.in 453798 2017-11-09 07:21:44Z vd $
+
+# PROVIDE: monerod
+# REQUIRE: LOGIN cleanvar
+# KEYWORD: shutdown
+
+# Add the following to /usr/local/etc/rc.conf.d/monerod to influence
+# the behavior of this script (default values are listed):
+#
+# monerod_enable="NO"  # change to "YES" to enable
+# monerod_user="monero"
+# monerod_group="monero"
+# monerod_data_dir="/var/db/monero"
+# monerod_conf="/usr/local/etc/monerod.conf"
+# monerod_log="/var/log/monero.log"
+# monerod_bind_addr="0.0.0.0"
+# monerod_bind_port="18080"
+# monerod_mine_for=""    # Do mining for the given address (empty: no mining)
+# monerod_mine_threads=""
+# monerod_mine_max_cpu_pct=""
+# monerod_extra_args=""  # See monerod --help
+
+. /etc/rc.subr
+
+name="pulsed"
+rcvar=pulsed_enable
+
+load_rc_config ${name}
+
+: ${pulsed_enable:="YES"}
+: ${pulsed_user:="monero"}
+: ${pulsed_group:="monero"}
+: ${pulsed_data_dir:="/root/.electroneropulse"}
+: ${pulsed_conf:="/usr/local/etc/${name}.conf"}
+: ${pulsed_log:="/var/log/${name}.log"}
+: ${pulsed_bind_addr:="0.0.0.0"}
+: ${pulsed_bind_port:="20389"}
+
+start_precmd="pulsed_start_precmd"
+pidfile="/var/run/${name}.pid"
+command="/usr/local/bin/pulsed"
+command_args=""
+command_args="${command_args} --data-dir=${pulsed_data_dir}"
+command_args="${command_args} --detach"
+command_args="${command_args} --log-file=${pulsed_log}"
+command_args="${command_args} --non-interactive"
+command_args="${command_args} --p2p-bind-ip=${pulsed_bind_addr}"
+command_args="${command_args} --p2p-bind-port=${pulsed_bind_port}"
+command_args="${command_args} --pidfile=${pidfile}"
+
+if [ -e "${pulsed_conf}" ] ; then
+	command_args="${command_args} --config-file=${pulsed_conf}"
+fi
+
+if [ -n "${pulsed_mine_for}" ] ; then
+	a="--bg-mining-enable --start-mining=${pulsed_mine_for}"
+
+	if [ -n "${pulsed_mine_threads}" ] ; then
+		a="${a} --mining-threads=${pulsed_mine_threads}"
+	fi
+
+	if [ -n "${pulsed_mine_max_cpu_pct}" ] ; then
+		a="${a} --bg-mining-miner-target=${pulsed_mine_max_cpu_pct}"
+	fi
+
+	command_args="${command_args} ${a}"
+fi
+
+command_args="${command_args} ${pulsed_extra_args}"
+command_args="${command_args} >${pulsed_data_dir}/pulsed.stdout"
+command_args="${command_args} 2>${pulsed_data_dir}/pulsed.stderr"
+
+pulsed_start_precmd()
+{
+	if [ ! -e "${pidfile}" ]; then
+		install -o ${pulsed_user} -g ${pulsed_group} -m 644 /dev/null "${pidfile}"
+	fi
+
+	if [ ! -e "${pulsed_log}" ]; then
+		install -o ${pulsed_user} -g ${pulsed_group} -m 600 /dev/null "${pulsed_log}"
+	fi
+
+	if [ ! -d "${pulsed_data_dir}" ]; then
+		install -d -o ${pulsed_user} -g ${pulsed_group} -m 700 "${pulsed_data_dir}"
+	fi
+
+	cd "${pulsed_data_dir}"
+}
+
+run_rc_command "$1"

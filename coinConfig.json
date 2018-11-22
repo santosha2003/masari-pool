@@ -28,7 +28,8 @@
     "name": "Masari",
     "mixIn": 2,
     "shortCode": "MSR"
-  },  "etnxp": {
+  },
+ "etnxp": {
     "funcFile": "./lib/coins/etnxp.js",
     "paymentFile": "./payment_systems/etnxp.js",
     "sigDigits": 100,

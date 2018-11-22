@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/usr/local/env bash
 cd ~
 git clone https://github.com/LMDB/lmdb
 cd lmdb
 git checkout 4d2154397afd90ca519bfa102b2aad515159bd50
 cd libraries/liblmdb/
-make -j `nproc`
+make -j  2 
+#FreeBSD 11.1+
+make -C /usr/ports/databases/lmdb install
+#`nproc`
 mkdir ~/.bin
 echo ' ' >> ~/.bashrc
 echo 'export PATH=~/.bin:$PATH' >> ~/.bashrc

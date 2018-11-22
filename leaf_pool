@@ -1,0 +1,11 @@
+Great thanks to ArqTras :
+
+    Open mysql (0.0.0.0, no more 127.0.0.1) . Firewall as protection so only leaf can access.
+    host in mysql will point http://mainserverIP/leafApi
+    Run pool module on leaf.
+    Good luck wink
+
+@DurinsMine
+DurinsMine commented on Oct 20
+
+I got it to work I think :)

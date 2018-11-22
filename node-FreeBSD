@@ -1,0 +1,61 @@
+Currently, there is no binary for freebsd
+Detected that you have 1 CPU core(s)
+Number of CPU core(s) less than or equal to 2, running in single-threaded mode
+Downloading https://nodejs.org/dist/v8.1.0/node-v8.1.0.tar.xz...
+######################################################################## 100.0%
+Computing checksum with shasum -a 256
+Checksums matched!
+$>./configure --prefix=/root/.nvm/versions/node/v8.1.0 <
+WARNING: failed to autodetect C++ compiler version (CXX=g++)
+WARNING: failed to autodetect C compiler version (CC=gcc)
+Node.js configure error: No acceptable C compiler found!
+
+        Please make sure you have a C compiler installed on your system and/or
+        consider adjusting the CC environment variable if you installed
+        it in a non-standard prefix.
+        
+Makefile:90: *** Missing or stale config.gypi, please run ./configure.  Stop.
+nvm: install v8.1.0 failed!
+
+    Is there anything in any of your profile files (.bashrc, .bash_profile, .zshrc, etc) that modifies the PATH?
+
+$ cat .profile 
+# $FreeBSD: releng/11.0/etc/root/dot.profile 278616 2015-02-12 05:35:00Z cperciva $
+#
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:~/bin
+export PATH
+HOME=/root
+export HOME
+TERM=${TERM:-xterm}
+export TERM
+PAGER=more
+export PAGER
+PS1="\$ "
+export PS1
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+    It looks, there is an issue with CC and CXX variables in nvm.sh. If I export these variables before installation, everything is OK.
+
+$ export CC=cc
+$ export CXX=c++
+$ nvm install v8.1.0
+Currently, there is no binary for freebsd
+Detected that you have 1 CPU core(s)
+Number of CPU core(s) less than or equal to 2, running in single-threaded mode
+Local cache found: $NVM_DIR/.cache/src/node-v8.1.0/node-v8.1.0.tar.xz
+Checksums match! Using existing downloaded archive $NVM_DIR/.cache/src/node-v8.1.0/node-v8.1.0.tar.xz
+$>./configure --prefix=/root/.nvm/versions/node/v8.1.0 <
+creating ./icu_config.gypi
+* Using ICU in deps/icu-small
+creating ./icu_config.gypi
+{ 'target_defaults': { 'cflags': [],
+                       'default_configuration': 'Release',
+                       'defines': [],
+                       'include_dirs': [],
+                       'libraries': []},
+
+...
+
+Now using node v8.1.0 (npm v5.0.3)
