@@ -9,3 +9,7 @@ Great thanks to ArqTras :
 DurinsMine commented on Oct 20
 
 I got it to work I think :)
+
+
+.. Setup mysql on the leaf pool or another DB onto main server (pool2)
+ block manager will process leaf shares.
