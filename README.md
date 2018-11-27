@@ -1,3 +1,6 @@
+* Add Masari coin, Electronero, Electronero Pulse.
+FreeBSD - install monero-cli from ports, lmdb, unbound , zmq, mysql-server57, node8.  
+
 Pool Design/Theory
 ==================
 The nodejs-pool is built around a small series of core daemons that share access to a single LMDB table for tracking of shares, with MySQL being used to centralize configurations and ensure simple access from local/remote nodes.  The core daemons follow:
@@ -25,6 +28,7 @@ https://cloud.electronero.org {
     gzip
 }
 ```
+* Nginx config here he same
 
 It is critically important that your webserver does not truncate the `/leafApi` portion of the URL for the remoteShare daemon, or it will not function!  Local pool servers DO use the remoteShare daemon, as this provides a buffer in case of an error with LMDB or another bug within the system, allowing shares and blocks to queue for submission as soon as the leafApi/remoteShare daemons are back up and responding with 200's.
 
