@@ -1,4 +1,7 @@
+
 * Add Masari coin, Electronero, Electronero Pulse.
+* into Mysql config (select pool1) add ActivePort for communicate w Masari daemon = 38081
+
 FreeBSD - install monero-cli from ports, lmdb, unbound , zmq, mysql-server57, node8.  
 
 Pool Design/Theory
