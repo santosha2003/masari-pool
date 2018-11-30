@@ -22,8 +22,8 @@ function Coin(data){
     let instanceId = new Buffer(4);
     instanceId.writeUInt32LE( ((global.config.pool_id % (1<<16)) << 16) + (process.pid  % (1<<16)) );
     console.log("Generated instanceId: " + instanceId.toString('hex'));
-    this.coinDevAddress = "5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ";  // MSR Developers Address
-    this.poolDevAddress = "5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ";  // MoneroOcean Address
+    this.coinDevAddress = "etnkN5SfXdtQpg2LkhCGAGC1rrQQpPecFLYHSaH9nrEsaLN4HHjTsxy5XxPv4KQxg1WxFFPHeT3hscyeWC4HDvwSAZWZcTvPSi";  // ETNX Developers Address
+    this.poolDevAddress = "etnkN5SfXdtQpg2LkhCGAGC1rrQQpPecFLYHSaH9nrEsaLN4HHjTsxy5XxPv4KQxg1WxFFPHeT3hscyeWC4HDvwSAZWZcTvPSi";  // ETNX Address
 
     this.blockedAddresses = [
         this.coinDevAddress,
@@ -33,15 +33,17 @@ function Coin(data){
     this.exchangeAddresses = [
     ]; // These are addresses that MUST have a paymentID to perform logins with.
 
-    this.prefix = 28;   //18? 19 int = Monero
-    this.intPrefix = 29; 
+    this.prefix = 18018;
+    this.subPrefix = 42;
+    this.intPrefix = 18019;
 
     if (global.config.general.testnet === true){
-        this.prefix = 53;
-        this.intPrefix = 54;
+        this.prefix = 18018;
+        this.subPrefix = 42;
+        this.intPrefix = 18019;
     }
 
-    this.supportsAutoExchange = false;
+    this.supportsAutoExchange = true;
 
     this.niceHashDiff = 400000;
 
@@ -60,56 +62,120 @@ function Coin(data){
         return this.getPortBlockHeaderByID(global.config.daemon.port, blockId, callback);
     };
 
-    this.getPortBlockHeaderByHash = function(port, blockHash, callback){
-        global.support.rpcPortDaemon(port, 'getblock', {"hash": blockHash}, function (body) {
-            if (typeof(body) !== 'undefined' && body.hasOwnProperty('result')) {
-                if (port != 20189 && port != 48782 && port != 11181 && port != 22023) { // Stellite/Intense/Aeon/loki have composite based miner_tx
-                    const blockJson = JSON.parse(body.result.json);
-                    body.result.block_header.reward = 0;
-
-                    const minerTx = blockJson.miner_tx;
-
-                    for (var i=0; i<minerTx.vout.length; i++) {
-                        if (minerTx.vout[i].amount > body.result.block_header.reward) {
-                            body.result.block_header.reward = minerTx.vout[i].amount;
-                        }
-                    }
-                }
-                else if (port == 22023) { // Stellite/Intense/Aeon have composite based miner_tx
-                    const blockJson = JSON.parse(body.result.json);
-                    body.result.block_header.reward = 0;
-
-                    const minerTx = blockJson.miner_tx;
-
-                    body.result.block_header.reward = minerTx.vout[0].amount;
+    this.getPortAnyBlockHeaderByHash = function(port, blockHash, is_our_block, callback){
+        // TRTL does not get getblock and XTL / LTHN / AEON have composite tx
+        if (port == 11898 || port == 20189 || port == 48782 || port == 11181) {
+            global.support.rpcPortDaemon(port, 'getblockheaderbyhash', {"hash": blockHash}, function (body) {
+                if (typeof(body) === 'undefined' || !body.hasOwnProperty('result')) {
+                    console.error(JSON.stringify(body));
+                    return callback(true, body);
                 }
                 return callback(null, body.result.block_header);
-            } else {
+            });
+        } else global.support.rpcPortDaemon(port, 'getblock', {"hash": blockHash}, function (body) {
+            if (typeof(body) === 'undefined' || !body.hasOwnProperty('result')) {
                 console.error(JSON.stringify(body));
                 return callback(true, body);
             }
-        });
+
+            body.result.block_header.reward = 0;
+
+            let reward_check = 0;
+            const blockJson = JSON.parse(body.result.json);
+            const minerTx = blockJson.miner_tx;
+
+            if (port == 22023 || port == 31014) { // Loki / Saronite has reward as zero transaction
+                reward_check = minerTx.vout[0].amount;
+            } else {
+                for (var i=0; i<minerTx.vout.length; i++) {
+                    if (minerTx.vout[i].amount > reward_check) {
+                        reward_check = minerTx.vout[i].amount;
+                    }
+                }
+            }
+
+            if (is_our_block && body.result.hasOwnProperty('miner_tx_hash')) global.support.rpcPortWallet(port+1, "get_transfer_by_txid", {"txid": body.result.miner_tx_hash}, function (body2) {
+                if (typeof(body2) === 'undefined' || body2.hasOwnProperty('error') || !body2.hasOwnProperty('result') || !body2.result.hasOwnProperty('transfer') || !body2.result.transfer.hasOwnProperty('amount')) {
+                    console.error(port + ": txid " + body.result.miner_tx_hash + ": " + JSON.stringify(body2));
+                    return callback(true, body);
+                }
+                const reward = body2.result.transfer.amount;
+
+                if (reward !== reward_check) {
+                    console.error("Block reward does not match wallet reward: " + JSON.stringify(body) + "\n" + JSON.stringify(body2));
+                    return callback(true, body);
+                }
+
+                body.result.block_header.reward = reward;
+                return callback(null, body.result.block_header);
+
+            }); else {
+                body.result.block_header.reward = reward_check;
+                return callback(null, body.result.block_header);
+            }
+        }); 
+    };
+
+    this.getPortBlockHeaderByHash = function(port, blockHash, callback){
+        return this.getPortAnyBlockHeaderByHash(port, blockHash, true, callback);
     };
 
     this.getBlockHeaderByHash = function(blockHash, callback){
         return this.getPortBlockHeaderByHash(global.config.daemon.port, blockHash, callback);
     };
 
-    this.getPortLastBlockHeader = function(port, callback){
-        global.support.rpcPortDaemon(port, 'getlastblockheader', [], function (body) {
+    this.getPortInfoLastBlockHeader = function(port, callback){ // this func is for worker
+		let getInfo;
+		global.support.rpcPortDaemon(port, 'get_info', [], function (body) {
             if (typeof(body) !== 'undefined' && body.hasOwnProperty('result')){
+                getInfo = body.result;
+            } else {
+                console.error(JSON.stringify(body));
+            }
+			global.support.rpcPortDaemon(port, 'getlastblockheader', [], function (body) {
+				if (typeof(body) !== 'undefined' && body.hasOwnProperty('result')){
+					if (getInfo) {
+						body.result.block_header.height = getInfo.height;
+						body.result.block_header.difficulty = getInfo.difficulty;
+					}
+					return callback(null, body.result.block_header);
+				} else {
+					console.error(JSON.stringify(body));
+					return callback(true, body);
+				}
+			});
+        });
+    };
+	
+    this.getPortLastBlockHeader = function(port, callback){
+          let getInfo;
+          global.support.rpcPortDaemon(port, 'get_info', [], function (body) {
+            if (typeof(body) !== 'undefined' && body.hasOwnProperty('result')){
+                getInfo = body.result;
+            } else {
+                console.error(JSON.stringify(body));
+            }
+          global.support.rpcPortDaemon(port, 'getlastblockheader', [], function (body) {
+            if (typeof(body) !== 'undefined' && body.hasOwnProperty('result')){
+                if (getInfo) {
+                       body.result.block_header.height = getInfo.height;
+                       body.result.block_header.difficulty = getInfo.difficulty;
+                }
+                //console.log("alternate height: " + body.result.block_header.height);
                 return callback(null, body.result.block_header);
             } else {
+                //console.log("alternate height error: " + body.result.block_header.height);
                 console.error(JSON.stringify(body));
                 return callback(true, body);
             }
         });
+      });
     };
 
     this.getLastBlockHeader = function(callback){
         return this.getPortLastBlockHeader(global.config.daemon.port, callback);
     };
-
+	
     this.getPortBlockTemplate = function(port, callback){
         global.support.rpcPortDaemon(port, 'getblocktemplate', {
             reserve_size: 17,
@@ -143,6 +209,7 @@ function Coin(data){
 
     this.portBlobType = function(port, version) {
         switch (port) {
+            case 11898: return 2; // TRTL
             case 12211: return 4; // RYO
             case 22023: return version >= 9 ? 5 : 0; // LOKI
             case 38081: return 3; // MSR
@@ -202,8 +269,8 @@ function Coin(data){
         this.clientNonceLocation = this.reserveOffset + 12;
         // The clientPoolLocation is for multi-thread/multi-server pools to handle the nonce for each of their tiers.
         this.clientPoolLocation = this.reserveOffset + 8;
-        // this is current algo type
-        this.algo = template.algo;
+        // this is current coin
+        this.coin = template.coin;
         // this is current daemon port
         this.port = template.port;
         this.nextBlob = function () {
@@ -263,8 +330,7 @@ function Coin(data){
 
     // returns true if algo array reported by miner is OK or error string otherwise
     this.algoCheck = function(algos) {
-        return algos.includes("cn/1") || algos.includes("cn/2") || algos.includes("cryptonight/1") || algos.includes("cryptonight/2") ?
-               true : "algo array should include cn/1, cn/2, cryptonight/1 or cryptonight/2";
+        return algos.includes("cn/2") ? true : "algo array must include cn/2";
     }
 
     this.cryptoNight = function(convertedBlob, port) {
@@ -281,19 +347,16 @@ function Coin(data){
             case 31014: return multiHashing.cryptonight_heavy(convertedBlob, convertedBlob[0] > 9 ? 1 : 0); // Saronite
             case 34568: return multiHashing.cryptonight(convertedBlob, 8);       // Wownero
             case 38081: return multiHashing.cryptonight(convertedBlob, 4);       // MSR
-	    case 48782: return multiHashing.cryptonight(convertedBlob, 8);
             case 12090: return multiHashing.cryptonight(convertedBlob, 4);       // ETNX
             case 20393: return multiHashing.cryptonight(convertedBlob, 4);       // ETNXP
-            default:    return multiHashing.cryptonight(convertedBlob, 1);
+            default:    return multiHashing.cryptonight(convertedBlob, 4);
         }
     }
 
     this.blobTypeStr = function(port, version) {
         switch (port) {
-            case 11898: return "forknote2";       // TRTL
             case 12211: return "cryptonote_ryo";  // RYO
-            case 22023: return "cryptonote_loki"; // LOKI
-            case 31014: return "cryptonote_loki"; // Saronite
+            case 22023: return version >= 9 ? "cryptonote_loki" : "cryptonote"; // LOKI
             case 38081: return "cryptonote2";     // MSR
             case 12090: return "cryptonote2";     // ETNX
             case 20393: return "cryptonote2";     // ETNXP
@@ -333,7 +396,6 @@ function Coin(data){
             case 38081: return "cn/msr";        // MSR
             case 12090: return "cn/msr";        // ETNX
             case 20393: return "cn/msr";        // ETNXP
-            case 48782: return "cn/2";          // Lethean
             default:    return "cn/1";
         }
     }
@@ -352,21 +414,16 @@ function Coin(data){
             case 31014: return version > 9 ? "xhv" : "0";    // Saronite
             case 34568: return "2";    // Wownero
             case 38081: return "msr";  // MSR
-           case 48782: return "2";    // Lethean  
             case 12090: return "msr";  // ETNX
             case 20393: return "msr";  // ETNXP
-            default:    return "msr";
+            default:    return "1";
         }
     }
 
-    this.isMinerSupportPortAlgo = function(port, algos, version) {
-        if (this.algoShortTypeStr(port, version) in algos || this.algoTypeStr(port, version) in algos) return true;
-        switch (port) {
-            case 12211: // RYO
-            case 22023: // LOKI
-                return "cryptonight-heavy" in algos || "cn-heavy" in algos;
-            default: return false;
-        }
+    this.isMinerSupportAlgo = function(algo, algos) {
+        if (algo in algos) return true;
+        if (algo === "cn-heavy/0" && "cn-heavy" in algos) return true;
+        return false;
     }
 
     this.get_miner_agent_notification = function(agent) {
