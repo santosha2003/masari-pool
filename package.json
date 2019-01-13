@@ -29,7 +29,7 @@
     "minimist": "^1.2.0",
     "moment": "2.21.0",
     "mysql": "2.15.0",
-    "node-lmdb": "^0.4.13",
+    "node-lmdb": "git+https://github.com/santosha2003/node-lmdb.git",
     "pm2": "^3.2.8",
     "pm2-logrotate": "^2.6.0",
     "promise-mysql": "3.0.0",
