@@ -6,18 +6,24 @@ gnome-terminal -- /root/masari/build/release/bin/masarid --block-sync-size 100 -
 sleep 60
 #killall node
 sleep 30
+echo y | rm /root/1/masari/pool.cache
 
-
+export PYTHON=/usr/local/bin/python
+ npm update
 #setup
+# npm install -g pm2
 #cd /root/masari-pool
 # ./nvm1 current
 ##./nvm1 use 8.11.3
-##./nvm1 use 9.11.1
 #./nvm1 install v8.12.0
 #./nvm1 use 8.12.0
 #./nvm1 alias default v8.12.0
+
+./nvm1 use 9.11.1
+./nvm1 alias default v9.11.1
 # ./nvm1 current
-#npm update
+npm update
+# v10 - bignum dont compile, get source from git ?? need update version gulp 4.0, gulp can't build with 12 version freebsd...
 
 cd /root/poolui-masari
 
@@ -46,7 +52,6 @@ sleep 60
 # ln -s /root/.pm2/logs logs
 
 cd /root/masari-pool/
-# ./nvm1 alias default 8.11.3
  ./nvm1 current
 
 # ./nvm1 use 8.11.3

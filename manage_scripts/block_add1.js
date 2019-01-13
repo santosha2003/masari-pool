@@ -2,36 +2,23 @@
 
 const argv = require('minimist')(process.argv.slice(2));
 
-//if (!argv.height) {
-//	console.log("Please specify block height arg1 ");
-	// process.exit(1);
-//}
-//const height = argv.height;
+if (!argv.height) {
+	console.error("Please specify block height");
+	process.exit(1);
+}
+const height = argv.height;
 
-//if (!argv.body) {
-//	console.log("Please specify block body");
-//	process.exit(1);
-//}
+if (!argv.body) {
+	console.error("Please specify block body");
+	process.exit(1);
+}
 const body = argv.body;
+let body2;
 
-    const body2 = {
-        hash: "4cdbf2d1570dc930eef18b5e319a7735f635bfffc48f2dfc5a90c42abc3dc2d4",
-        difficulty: 10574249777,
-        shares: 0,
-        timestamp: 1543484613,  // Date.now(),
-        poolType: 0, //global.protos.POOLTYPE.PPLNS,
-        unlocked: false,
-        valid: true,
-        port: 38081,
-        value:19165676678443
-    };
- const height=321428;
-
-//try { body2 = JSON.parse(body); } catch(e) {
-//	console.log("Can't parse arg2 json block body: " + body);
-	// process.exit(1);
-//}
-
+try { body2 = JSON.parse(body); } catch(e) {
+	console.error("Can't parse block body: " + body);
+	process.exit(1);
+}
 
 require("../init_mini.js").init(function() {
 	const body3 = {
@@ -41,7 +28,6 @@ require("../init_mini.js").init(function() {
 		"timestamp":  body2.timestamp,
 		"poolType":   body2.poolType,
 		"unlocked":   body2.unlocked,
-		"port":       body2.port,
 		"valid":      body2.valid,
 		"value":      body2.value
 	};
@@ -56,10 +42,10 @@ require("../init_mini.js").init(function() {
 		console.error("Block body is invalid: " + JSON.stringify(body3));
 		process.exit(1);
         }
-	const body4 = global.protos.Block.encode(body3);
+	const body4 = global.protos.AltBlock.encode(body3);
         let txn = global.database.env.beginTxn();
 	txn.putBinary(global.database.blockDB, height, body4);
         txn.commit();
-	console.log("Block on " + height + " added! Exiting!");
+	console.log("Block on " + height + " height added! Exiting!");
 	process.exit(0);
 });

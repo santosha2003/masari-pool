@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export NVM_DIR=/root/.nvm
-export NODE_VERSION=8.11.3
+export NODE_VERSION=9.11.1
 export CC=cc
 export CXX=c++
 

@@ -1,8 +1,9 @@
--- Mysql server 5.7+
-CREATE DATABASE pool1;
-GRANT ALL ON pool1.* TO pool1@`127.0.0.1` IDENTIFIED BY 'ts-s';
-GRANT ALL ON pool1.* TO pool1@localhost IDENTIFIED BY 'ts-s';
-FLUSH PRIVILEGES;
+-- Mysql server 5.7+  change db password , Masari address of pool.  (mysql < base.sql do not forget mysql -u pool -p pool1 < up-ports.sql)
+-- RPC port Masari before cnfastv2 = 38081 
+ CREATE DATABASE pool1;
+ GRANT ALL ON pool1.* TO pool1@`127.0.0.1` IDENTIFIED BY 'secret';
+ GRANT ALL ON pool1.* TO pool1@localhost IDENTIFIED BY 'secret';
+-- FLUSH PRIVILEGES;
 USE pool1;
 ALTER DATABASE pool1 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE TABLE `balance` (
@@ -188,7 +189,7 @@ INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'trustPenalty', '30', 'int', 'Number of shares that must be successful to be trusted, reset to this value if trust share is broken');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'retargetTime', '60', 'int', 'Time between difficulty retargets');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'address', '127.0.0.1', 'string', 'Monero Daemon RPC IP');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'port', '12090', 'int', 'Monero Daemon RPC Port');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'port', '38081', 'int', 'Masari Daemon RPC Port');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'activePort', '0', 'int', 'Currently active daemon RPC port');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'activePortHeavy', '0', 'int', 'Currently active heavy algo daemon RPC port');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'activePortLight', '0', 'int', 'Currently active light algo daemon RPC port');
@@ -200,12 +201,12 @@ INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'algoHashFactorXTL', '0', 'float', 'XTL algo hash price factor relative to algoHashFactor');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('daemon', 'enableAlgoSwitching', 'false', 'bool', 'Enable smart miners (need additional altblockManager module)');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('wallet', 'address', '127.0.0.1', 'string', 'Monero Daemon RPC Wallet IP');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('wallet', 'port', '12092', 'int', 'Monero Daemon RPC Wallet Port');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('wallet', 'port', '38084', 'int', 'Masari Daemon RPC Wallet Port - as set by pm2 script');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('rpc', 'https', 'false', 'bool', 'Enable RPC over SSL');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'maxDifficulty', '500000', 'int', 'Maximum difficulty for VarDiff');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'minDifficulty', '100', 'int', 'Minimum difficulty for VarDiff');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'varDiffVariance', '20', 'int', 'Percentage out of the target time that difficulty changes');
-INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'varDiffMaxChange', '125', 'int', 'Percentage amount that the difficulty may change');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'maxDifficulty', '2500000', 'int', 'Maximum difficulty for VarDiff');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'minDifficulty', '800', 'int', 'Minimum difficulty for VarDiff');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'varDiffVariance', '200', 'int', 'Percentage out of the target time that difficulty changes');
+INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('pool', 'varDiffMaxChange', '1250', 'int', 'Percentage amount that the difficulty may change');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('payout', 'btcFee', '1.5', 'float', 'Fee charged for auto withdrawl via BTC');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('payout', 'ppsFee', '5.0', 'float', 'Fee charged for usage of the PPS pool');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('payout', 'pplnsFee', '.5', 'float', 'Fee charged for the usage of the PPLNS pool');
@@ -269,7 +270,5 @@ INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('payout', 'priority', '0', 'int', 'Payout priority setting. 0 = use default (4x fee); 1 = low prio (1x fee)');
 INSERT INTO pool1.config (module, item, item_value, item_type, Item_desc) VALUES ('general', 'allowStuckPoolKill', 'false', 'bool', 'Allow to kill the pool in case of stuck block template');
 INSERT INTO pool1.users (username, pass, email, admin, payout_threshold) VALUES ('Administrator', null, 'Password123', 1, 0);
-INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (3333, 1000, 'Low-End Hardware (Up to 30-40 h/s)', 'pplns', 0, 0);
-INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (5555, 5000, 'Medium-Range Hardware (Up to 160 h/s)', 'pplns', 0, 0);
-INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (7777, 10000, 'High-End Hardware (Anything else!)', 'pplns', 0, 0);
-INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (9000, 20000, 'Claymore SSL', 'pplns', 0, 1);
+INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (5550, 5000, 'Medium-Range Hardware (Up to 160 h/s)', 'pplns', 0, 0);
+INSERT INTO pool1.port_config (poolPort, difficulty, portDesc, portType, hidden, `ssl`) VALUES (7770, 10000, 'High-End Hardware (Anything else!)', 'pplns', 0, 0);
