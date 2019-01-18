@@ -1,0 +1,85 @@
+{
+  "_from": "node-lmdb@0.4.13",
+  "_id": "node-lmdb@0.4.13",
+  "_inBundle": false,
+  "_integrity": "sha1-ZaqbQsKhntcTX2GOqqFxHOu3vik=",
+  "_location": "/node-lmdb",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "node-lmdb@0.4.13",
+    "name": "node-lmdb",
+    "escapedName": "node-lmdb",
+    "rawSpec": "0.4.13",
+    "saveSpec": null,
+    "fetchSpec": "0.4.13"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/node-lmdb/-/node-lmdb-0.4.13.tgz",
+  "_shasum": "65aa9b42c2a19ed7135f618eaaa1711cebb7be29",
+  "_spec": "node-lmdb@0.4.13",
+  "_where": "/root/masari-pool",
+  "author": {
+    "name": "Timur Kristóf",
+    "email": "venemo@fedoraproject.org"
+  },
+  "bugs": {
+    "url": "https://github.com/santosha2003/node-lmdb/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Timur Kristóf",
+      "email": "venemo@fedoraproject.org"
+    },
+    {
+      "name": "Erich Ocean",
+      "email": "erich@xygroup.co"
+    },
+    {
+      "name": "Braydon Fuller",
+      "email": "courier@braydon.com"
+    }
+  ],
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "nan": "^2.6.2"
+  },
+  "deprecated": false,
+  "description": "Node binding for LMDB, the Lightning Memory-Mapped Database",
+  "devDependencies": {
+    "benchmark": "^2.1.4",
+    "chai": "^3.5.0",
+    "jshint": "^2.9.4",
+    "mkdirp": "^0.5.1",
+    "mocha": "^3.3.0",
+    "node-gyp": "^3.6.0",
+    "rimraf": "^2.6.1"
+  },
+  "gypfile": true,
+  "homepage": "https://github.com/santosha2003/node-lmdb#readme",
+  "keywords": [
+    "lmdb",
+    "database",
+    "mdb",
+    "lightning",
+    "binding"
+  ],
+  "license": "MIT",
+  "main": "./index.js",
+  "name": "node-lmdb",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santosha2003/node-lmdb.git"
+  },
+  "scripts": {
+    "benchmark": "node ./benchmark/index.js",
+    "install": "node-gyp rebuild",
+    "test": "mocha test/**.test.js --recursive"
+  },
+  "version": "0.4.13"
+}
