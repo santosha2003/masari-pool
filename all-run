@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 gnome-terminal -- /root/masari/build/release/bin/masarid --block-sync-size 100 --fast-block-sync=1
-
+# pkg install -f -y node8
+#pkg install mysql57-server
+#pkg set -o www/node:www/node8
+#pkg set -o www/node8:www/node
+#make -C /usr/ports/www/npm deinstall install
 #killall node
 sleep 60
 #killall node
@@ -15,21 +19,22 @@ export PYTHON=/usr/local/bin/python
 #cd /root/masari-pool
 # ./nvm1 current
 ##./nvm1 use 8.11.3
-#./nvm1 install v8.12.0
-#./nvm1 use 8.12.0
-#./nvm1 alias default v8.12.0
-
-./nvm1 use 9.11.1
-./nvm1 alias default v9.11.1
+./nvm1 install v8.15.0
+./nvm1 use 8.15.0
+./nvm1 alias default v8.15.0
+npm rebuild
+#./nvm1 use 9.11.1
+#./nvm1 alias default v9.11.1
+#npm i bignum
 # ./nvm1 current
 npm update
 # v10 - bignum dont compile, get source from git ?? need update version gulp 4.0, gulp can't build with 12 version freebsd...
 
-cd /root/poolui-masari
+#cd /root/poolui-masari
 
-gnome-terminal -- npm start
+#gnome-terminal -- npm start
 
-cd /root/masari-pool
+#cd /root/masari-pool
 
 # 38080 p2p , rpc 38081, wallet rpc 38084   
 # Mysql base - add daemon2.port daemon2.address
@@ -62,22 +67,23 @@ npm update
 #pm2 list
 
 #pm2 start /root/electroneropulse/build/release/bin/pulse-wallet-rpc -- --rpc-bind-port 20394 --password-file ~/1/etn-wallet/wallet_pass --wallet-file ~/1/etn-wallet/etnx-pool --disable-rpc-login --trusted-daemon
-pm2 list
+gnome-terminal -- pm2 stop all
+gnome-terminal -- pm2 list
 sleep 60
-pm2 list
-pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api
+gnome-terminal -- pm2 list 
+gnome-terminal -- pm2 start init.js --name=api --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=api 
 sleep 15
-pm2 start init.js --name=blockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager
-#pm2 start init.js --name=altblockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager
-pm2 start init.js --name=worker --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=worker
-pm2 start init.js --name=payments --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=payments
-pm2 start init.js --name=remoteShare --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=remoteShare
-pm2 start init.js --name=longRunner --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=longRunner
-pm2 start init.js --name=pool --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=pool
+gnome-terminal -- pm2 start init.js --name=blockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager 
+#gnome-terminal -- pm2 start init.js --name=altblockManager --log-date-format="YYYY-MM-DD HH:mm Z"  -- --module=blockManager
+gnome-terminal -- pm2 start init.js --name=worker --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=worker 
+gnome-terminal -- pm2 start init.js --name=payments --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=payments 
+gnome-terminal -- pm2 start init.js --name=remoteShare --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=remoteShare 
+gnome-terminal -- pm2 start init.js --name=longRunner --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=longRunner 
+gnome-terminal -- pm2 start init.js --name=pool --log-date-format="YYYY-MM-DD HH:mm Z" -- --module=pool 
 #pm2 restart api
 
 
-pm2 restart api
+gnome-terminal -- pm2 restart api 
 sleep 5
 
 # 8081 port
@@ -99,7 +105,7 @@ LIMIT=500
 for ((a=1; a <= $LIMIT ; a++))
  do
  echo $ARG
-pm2 list
+ pm2 list
  ./nvm1 current
  sleep 360
 
