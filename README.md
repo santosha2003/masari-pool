@@ -1,4 +1,10 @@
 
+* now working - change rpc wallet for Masari to 38083, found block - store data correctly (into coin config - change wallet port = rpc port +2)
+
+Masari anti-asic fork + SECOR - update  2019.02.01 (block type).
+Pool may switch coins - 4 algo cn-half cn/2 cn-lite cn-trtl v2 - now cn-pico (will add Ryo cn-gpu), select correct daemon port in the config -Mysql)
+
+
 * Add Masari coin, Electronero, Electronero Pulse.
 * into Mysql config (select pool1) add ActivePort for communicate w Masari daemon = 38081
 
