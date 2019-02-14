@@ -13,20 +13,21 @@ const argv = require('minimist')(process.argv.slice(2));
 //	process.exit(1);
 //}
 const body = argv.body;
+
     const body2 = {
-        hash: "4cdbf2d1570dc930eef18b5e319a7735f635bfffc48f2dfc5a90c42abc3dc2d4",
+        hash: "1fc97f07b0f2f795a5f5b6628bd336a0618d1a33b026a336bddf84831b37b3a6",
         difficulty: 10574249777,
         shares: 1,
-        timestamp: 1543484613000,  // Date.now(),
+        timestamp: 1549177774000,  // Date.now(),
         poolType: 0, //global.protos.POOLTYPE.PPLNS,
         unlocked: false,
         valid: true,
         port: 38081,
-        value:19165676678443,
+        value:8712105651536,
         paymentAddress:"5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ",
         worker:"x"
     };
- const height=321428;
+ const height=373888;
 
 //try { body2 = JSON.parse(body); } catch(e) {
 //	console.log("Can't parse arg2 json block body: " + body);
@@ -44,7 +45,7 @@ require("../init_mini.js").init(function() {
 		"unlocked":   body2.unlocked,
 		"port":       body2.port,
 		"valid":      body2.valid,
-                "value":      body2.value,
+		"value":      body2.value,
                 "paymentAddress":      body2.paymentAddress,
 		"worker":     body2.worker
 	};
