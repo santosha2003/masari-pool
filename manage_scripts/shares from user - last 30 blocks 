@@ -1,0 +1,2 @@
+
+node dump_shares.js --user="5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ" --depth=30 > sha30blocks

@@ -1,0 +1,14 @@
+{
+  "pool_id": 0,
+  "bind_ip": "0.0.0.0",
+  "hostname": "santoshapro.me",
+  "db_storage_path": "/root/pool_db1/",
+  "coin": "msr",
+  "mysql": {
+    "connectionLimit": 50,
+    "host": "santoshapro.me",
+    "database": "pool1",
+    "user": "pool1",
+    "password": "secret"
+  }
+}

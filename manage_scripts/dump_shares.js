@@ -1,19 +1,26 @@
 "use strict";
 
 let range = require('range');
-const argv = require('minimist')(process.argv.slice(2));
+const args = require('minimist')(process.argv.slice(2));
 
-if (!argv.user) {
-        console.error("Please specify user address to dump");
-        process.exit(1);
-}
-const user = argv.user;
+let user;
+
+if (!args.user) {
+        console.error("Please specify user address to dump ");
+ user = "5hvLre4ry2MALdUE7wF2TDj5EHGsnuMWWVwjuP1fX3oaMAxkZfc6FEcLoW3ZsYPZmEQ7yUAqpnScsN9D4eQ2PptZ5e1DGKQ";
+    //    process.exit(1);
+ } else {
+    user = args.user;
+        }
+
+console.dir(args);
+    console.log(args.user);
 
 let worker;
-if (argv.worker) worker = argv.worker;
+if (args.worker) worker = args.worker;
 
 let depth = 10;
-if (argv.depth) depth = argv.depth;
+if (args.depth) depth = args.depth;
 
 require("../init_mini.js").init(function() {
 
@@ -24,7 +31,6 @@ require("../init_mini.js").init(function() {
                 }
                 let lastBlock = body.height + 1;
                 let txn = global.database.env.beginTxn({readOnly: true});
-
                 let cursor = new global.database.lmdb.Cursor(txn, global.database.shareDB);
                 range.range(lastBlock, lastBlock - depth, -1).forEach(function (blockID) {
                         for (let found = (cursor.goToRange(parseInt(blockID)) === blockID); found; found = cursor.goToNextDup()) {
